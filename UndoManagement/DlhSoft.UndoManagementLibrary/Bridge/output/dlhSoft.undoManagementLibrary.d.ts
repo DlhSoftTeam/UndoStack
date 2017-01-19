@@ -1,6 +1,6 @@
 /// <reference path="./bridge.d.ts" />
 
-declare module UndoManagementLibrary {
+declare module DlhSoft.UndoManagementLibrary {
     export interface UndoStack extends System.ComponentModel.INotifyPropertyChanged {
         addPropertyChanged(value: {(sender: Object, e: System.ComponentModel.PropertyChangedEventArgs): void}): void;
         removePropertyChanged(value: {(sender: Object, e: System.ComponentModel.PropertyChangedEventArgs): void}): void;

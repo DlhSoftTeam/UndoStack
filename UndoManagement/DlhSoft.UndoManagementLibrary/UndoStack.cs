@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 
-namespace UndoManagementLibrary
+namespace DlhSoft.UndoManagementLibrary
 {
     public class UndoStack : INotifyPropertyChanged
     {

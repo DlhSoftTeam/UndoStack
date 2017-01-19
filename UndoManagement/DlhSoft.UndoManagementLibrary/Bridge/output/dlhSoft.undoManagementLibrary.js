@@ -3,10 +3,10 @@
  * @copyright Copyright ©  2017
  * @compiler Bridge.NET 15.7.0
  */
-Bridge.assembly("UndoManagementLibrary", function ($asm, globals) {
+Bridge.assembly("DlhSoft.UndoManagementLibrary", function ($asm, globals) {
     "use strict";
 
-    Bridge.define("UndoManagementLibrary.UndoStack", {
+    Bridge.define("DlhSoft.UndoManagementLibrary.UndoStack", {
         inherits: [System.ComponentModel.INotifyPropertyChanged],
         completedActions: null,
         undoneActions: null,
@@ -19,8 +19,8 @@ Bridge.assembly("UndoManagementLibrary", function ($asm, globals) {
             "removePropertyChanged", "System$ComponentModel$INotifyPropertyChanged$removePropertyChanged"
             ],
             init: function () {
-                this.completedActions = new (System.Collections.Generic.List$1(UndoManagementLibrary.UndoStack.ActionRecord))();
-                this.undoneActions = new (System.Collections.Generic.List$1(UndoManagementLibrary.UndoStack.ActionRecord))();
+                this.completedActions = new (System.Collections.Generic.List$1(DlhSoft.UndoManagementLibrary.UndoStack.ActionRecord))();
+                this.undoneActions = new (System.Collections.Generic.List$1(DlhSoft.UndoManagementLibrary.UndoStack.ActionRecord))();
             }
         },
         getCanUndo: function () {
@@ -35,7 +35,7 @@ Bridge.assembly("UndoManagementLibrary", function ($asm, globals) {
             var originallyCanUndo = this.getCanUndo();
             var originallyCanRedo = this.getCanRedo();
             this.undoneActions.clear();
-            this.completedActions.insert(0, Bridge.merge(new UndoManagementLibrary.UndoStack.ActionRecord(), {
+            this.completedActions.insert(0, Bridge.merge(new DlhSoft.UndoManagementLibrary.UndoStack.ActionRecord(), {
                 whatWasDone: whatWasDone,
                 howToUndo: howToUndo,
                 whenWasDone: ($t = whenWasDone, $t != null ? $t : new Date())
@@ -109,7 +109,7 @@ Bridge.assembly("UndoManagementLibrary", function ($asm, globals) {
         }
     });
 
-    Bridge.define("UndoManagementLibrary.UndoStack.ActionRecord", {
+    Bridge.define("DlhSoft.UndoManagementLibrary.UndoStack.ActionRecord", {
         whatWasDone: null,
         howToUndo: null,
         config: {
