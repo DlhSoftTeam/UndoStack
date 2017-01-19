@@ -23,12 +23,12 @@ namespace UndoManagementLibrary
 
         #region Recording
 
-        private void Record(Action whatWasDone, Action howToUndo, DateTime whenWasDone)
+        public void Record(Action whatWasDone, Action howToUndo, DateTime? whenWasDone = null)
         {
             var originallyCanUndo = CanUndo;
             var originallyCanRedo = CanRedo;
             undoneActions.Clear();
-            completedActions.Insert(0, new ActionRecord { WhatWasDone = whatWasDone, HowToUndo = howToUndo, WhenWasDone = whenWasDone });
+            completedActions.Insert(0, new ActionRecord { WhatWasDone = whatWasDone, HowToUndo = howToUndo, WhenWasDone = whenWasDone ?? DateTime.Now });
             if (!originallyCanUndo)
                 OnPropertyChanged(nameof(CanUndo));
             if (originallyCanRedo)
@@ -89,7 +89,7 @@ namespace UndoManagementLibrary
                 undoneActions.RemoveAt(0);
                 lastUndoneAction.WhatWasDone();
                 completedActions.Insert(0, lastUndoneAction);
-                var previouslyUndoneAction = completedActions.FirstOrDefault();
+                var previouslyUndoneAction = undoneActions.FirstOrDefault();
                 if (previouslyUndoneAction == null || previouslyUndoneAction.WhenWasDone - lastUndoneAction.WhenWasDone > relatedActionSpan)
                     break;
             }

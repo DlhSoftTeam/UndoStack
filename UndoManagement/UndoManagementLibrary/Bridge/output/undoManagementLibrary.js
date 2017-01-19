@@ -30,13 +30,15 @@ Bridge.assembly("UndoManagementLibrary", function ($asm, globals) {
             return System.Linq.Enumerable.from(this.undoneActions).any();
         },
         record: function (whatWasDone, howToUndo, whenWasDone) {
+            var $t;
+            if (whenWasDone === void 0) { whenWasDone = null; }
             var originallyCanUndo = this.getCanUndo();
             var originallyCanRedo = this.getCanRedo();
             this.undoneActions.clear();
             this.completedActions.insert(0, Bridge.merge(new UndoManagementLibrary.UndoStack.ActionRecord(), {
                 whatWasDone: whatWasDone,
                 howToUndo: howToUndo,
-                whenWasDone: whenWasDone
+                whenWasDone: ($t = whenWasDone, $t != null ? $t : new Date())
             } ));
             if (!originallyCanUndo) {
                 this.onPropertyChanged("canUndo");
@@ -90,7 +92,7 @@ Bridge.assembly("UndoManagementLibrary", function ($asm, globals) {
                 this.undoneActions.removeAt(0);
                 lastUndoneAction.whatWasDone();
                 this.completedActions.insert(0, lastUndoneAction);
-                var previouslyUndoneAction = System.Linq.Enumerable.from(this.completedActions).firstOrDefault(null, null);
+                var previouslyUndoneAction = System.Linq.Enumerable.from(this.undoneActions).firstOrDefault(null, null);
                 if (previouslyUndoneAction == null || System.TimeSpan.gt(Bridge.Date.subdd(previouslyUndoneAction.whenWasDone, lastUndoneAction.whenWasDone), relatedActionSpan)) {
                     break;
                 }

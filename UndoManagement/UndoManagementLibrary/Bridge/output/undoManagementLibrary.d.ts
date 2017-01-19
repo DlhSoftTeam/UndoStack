@@ -6,7 +6,7 @@ declare module UndoManagementLibrary {
         removePropertyChanged(value: {(sender: Object, e: System.ComponentModel.PropertyChangedEventArgs): void}): void;
         getCanUndo(): boolean;
         getCanRedo(): boolean;
-        record(whatWasDone: {(): void}, howToUndo: {(): void}, whenWasDone: Date): void;
+        record(whatWasDone: {(): void}, howToUndo: {(): void}, whenWasDone?: Date): void;
         doAndRecord(whatToDo: {(): void}, howToUndo: {(): void}): void;
         undo(relatedActionSpan?: System.TimeSpan): void;
         redo(relatedActionSpan?: System.TimeSpan): void;
