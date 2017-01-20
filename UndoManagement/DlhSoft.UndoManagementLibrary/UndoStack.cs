@@ -5,6 +5,9 @@ using System.Linq;
 
 namespace DlhSoft.UndoManagementLibrary
 {
+    /// <summary>
+    /// Provides support for recording (or executing and automatically recording) and undoing or redoing actions.
+    /// </summary>
     public class UndoStack : INotifyPropertyChanged
     {
         #region Records
@@ -23,6 +26,9 @@ namespace DlhSoft.UndoManagementLibrary
 
         #region Recording
 
+        /// <summary>
+        /// Records an already executed action to the undo stack.
+        /// </summary>
         public void Record(Action whatWasDone, Action howToUndo, int? whenWasDone = null)
         {
             var originallyCanUndo = CanUndo;
@@ -35,6 +41,9 @@ namespace DlhSoft.UndoManagementLibrary
                 OnPropertyChanged(nameof(CanRedo));
         }
 
+        /// <summary>
+        /// Executes an action and records it to the undo stack.
+        /// </summary>
         public void DoAndRecord(Action whatToDo, Action howToUndo)
         {
             DateTime now = DateTime.Now;
@@ -46,13 +55,24 @@ namespace DlhSoft.UndoManagementLibrary
 
         #region Can undo/redo
 
+        /// <summary>
+        /// Indicates whether there are any completed operations that can be undone.
+        /// </summary>
         public bool CanUndo => completedActions.Any();
+
+        /// <summary>
+        /// Indicates whether there are any undone operations that can be redone.
+        /// </summary>
         public bool CanRedo => undoneActions.Any();
 
         #endregion
 
         #region Undo/redo
 
+        /// <summary>
+        /// Undoes the last completed action and related actions.
+        /// </summary>
+        /// <param name="relatedActionSpan">Maximum time span in milliseconds to consider for determining related actions.</param>
         public void Undo(int? relatedActionSpan = null)
         {
             if (!CanUndo)
@@ -76,6 +96,10 @@ namespace DlhSoft.UndoManagementLibrary
                 OnPropertyChanged(nameof(CanRedo));
         }
 
+        /// <summary>
+        /// Redoes the last undone action and related actions.
+        /// </summary>
+        /// <param name="relatedActionSpan">Maximum time span in milliseconds to consider for determining related actions.</param>
         public void Redo(int? relatedActionSpan = null)
         {
             if (!CanRedo)
@@ -103,8 +127,14 @@ namespace DlhSoft.UndoManagementLibrary
 
         #region PropertyChanged
 
+        /// <summary>
+        /// Occurs when CanUndo/CanRedo property values change.
+        /// </summary>
         public event PropertyChangedEventHandler PropertyChanged;
 
+        /// <summary>
+        /// Raises PropertyChanged event.
+        /// </summary>
         protected virtual void OnPropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
