@@ -6,10 +6,10 @@ declare module DlhSoft.UndoManagementLibrary {
         removePropertyChanged(value: {(sender: Object, e: System.ComponentModel.PropertyChangedEventArgs): void}): void;
         getCanUndo(): boolean;
         getCanRedo(): boolean;
-        record(whatWasDone: {(): void}, howToUndo: {(): void}, whenWasDone?: Date): void;
+        record(whatWasDone: {(): void}, howToUndo: {(): void}, whenWasDone?: number): void;
         doAndRecord(whatToDo: {(): void}, howToUndo: {(): void}): void;
-        undo(relatedActionSpan?: System.TimeSpan): void;
-        redo(relatedActionSpan?: System.TimeSpan): void;
+        undo(relatedActionSpan?: number): void;
+        redo(relatedActionSpan?: number): void;
         onPropertyChanged(propertyName: string): void;
     }
     export interface UndoStackFunc extends Function {
@@ -22,7 +22,7 @@ declare module DlhSoft.UndoManagementLibrary {
         export interface ActionRecord {
             whatWasDone: {(): void};
             howToUndo: {(): void};
-            whenWasDone: Date;
+            whenWasDone: number;
         }
         export interface ActionRecordFunc extends Function {
             prototype: ActionRecord;

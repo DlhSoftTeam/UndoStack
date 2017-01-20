@@ -38,7 +38,7 @@ Bridge.assembly("DlhSoft.UndoManagementLibrary", function ($asm, globals) {
             this.completedActions.insert(0, Bridge.merge(new DlhSoft.UndoManagementLibrary.UndoStack.ActionRecord(), {
                 whatWasDone: whatWasDone,
                 howToUndo: howToUndo,
-                whenWasDone: ($t = whenWasDone, $t != null ? $t : new Date())
+                whenWasDone: ($t = whenWasDone, $t != null ? $t : System.Int64.clip32(System.Int64((new Date()).getTime()).mul(10000).div(System.Int64(10000))))
             } ));
             if (!originallyCanUndo) {
                 this.onPropertyChanged("canUndo");
@@ -50,15 +50,15 @@ Bridge.assembly("DlhSoft.UndoManagementLibrary", function ($asm, globals) {
         doAndRecord: function (whatToDo, howToUndo) {
             var now = new Date();
             whatToDo();
-            this.record(whatToDo, howToUndo, now);
+            this.record(whatToDo, howToUndo, System.Int64.clip32(System.Int64((now).getTime()).mul(10000).div(System.Int64(10000))));
         },
         undo: function (relatedActionSpan) {
             if (relatedActionSpan === void 0) { relatedActionSpan = null; }
             if (!this.getCanUndo()) {
                 return;
             }
-            if (System.TimeSpan.eq(relatedActionSpan, null)) {
-                relatedActionSpan = System.TimeSpan.zero;
+            if (relatedActionSpan == null) {
+                relatedActionSpan = 0;
             }
             var originallyCanRedo = this.getCanRedo();
             while (true) {
@@ -67,7 +67,7 @@ Bridge.assembly("DlhSoft.UndoManagementLibrary", function ($asm, globals) {
                 lastCompletedAction.howToUndo();
                 this.undoneActions.insert(0, lastCompletedAction);
                 var previouslyCompletedAction = System.Linq.Enumerable.from(this.completedActions).firstOrDefault(null, null);
-                if (previouslyCompletedAction == null || System.TimeSpan.gt(Bridge.Date.subdd(lastCompletedAction.whenWasDone, previouslyCompletedAction.whenWasDone), relatedActionSpan)) {
+                if (previouslyCompletedAction == null || System.Nullable.gt(Bridge.Int.clip32(lastCompletedAction.whenWasDone - previouslyCompletedAction.whenWasDone), relatedActionSpan)) {
                     break;
                 }
             }
@@ -83,8 +83,8 @@ Bridge.assembly("DlhSoft.UndoManagementLibrary", function ($asm, globals) {
             if (!this.getCanRedo()) {
                 return;
             }
-            if (System.TimeSpan.eq(relatedActionSpan, null)) {
-                relatedActionSpan = System.TimeSpan.zero;
+            if (relatedActionSpan == null) {
+                relatedActionSpan = 0;
             }
             var originallyCanUndo = this.getCanUndo();
             while (true) {
@@ -93,7 +93,7 @@ Bridge.assembly("DlhSoft.UndoManagementLibrary", function ($asm, globals) {
                 lastUndoneAction.whatWasDone();
                 this.completedActions.insert(0, lastUndoneAction);
                 var previouslyUndoneAction = System.Linq.Enumerable.from(this.undoneActions).firstOrDefault(null, null);
-                if (previouslyUndoneAction == null || System.TimeSpan.gt(Bridge.Date.subdd(previouslyUndoneAction.whenWasDone, lastUndoneAction.whenWasDone), relatedActionSpan)) {
+                if (previouslyUndoneAction == null || System.Nullable.gt(Bridge.Int.clip32(previouslyUndoneAction.whenWasDone - lastUndoneAction.whenWasDone), relatedActionSpan)) {
                     break;
                 }
             }
@@ -112,10 +112,6 @@ Bridge.assembly("DlhSoft.UndoManagementLibrary", function ($asm, globals) {
     Bridge.define("DlhSoft.UndoManagementLibrary.UndoStack.ActionRecord", {
         whatWasDone: null,
         howToUndo: null,
-        config: {
-            init: function () {
-                this.whenWasDone = new Date(-864e13);
-            }
-        }
+        whenWasDone: 0
     });
 });

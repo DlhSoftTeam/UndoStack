@@ -16,19 +16,19 @@ namespace DlhSoft.UndoManagementLibrary
         {
             public Action WhatWasDone;
             public Action HowToUndo;
-            public DateTime WhenWasDone;
+            public int WhenWasDone;
         }
 
         #endregion
 
         #region Recording
 
-        public void Record(Action whatWasDone, Action howToUndo, DateTime? whenWasDone = null)
+        public void Record(Action whatWasDone, Action howToUndo, int? whenWasDone = null)
         {
             var originallyCanUndo = CanUndo;
             var originallyCanRedo = CanRedo;
             undoneActions.Clear();
-            completedActions.Insert(0, new ActionRecord { WhatWasDone = whatWasDone, HowToUndo = howToUndo, WhenWasDone = whenWasDone ?? DateTime.Now });
+            completedActions.Insert(0, new ActionRecord { WhatWasDone = whatWasDone, HowToUndo = howToUndo, WhenWasDone = whenWasDone ?? (int)(DateTime.Now.Ticks / 10000) });
             if (!originallyCanUndo)
                 OnPropertyChanged(nameof(CanUndo));
             if (originallyCanRedo)
@@ -39,7 +39,7 @@ namespace DlhSoft.UndoManagementLibrary
         {
             DateTime now = DateTime.Now;
             whatToDo();
-            Record(whatToDo, howToUndo, now);
+            Record(whatToDo, howToUndo, (int)(now.Ticks / 10000));
         }
 
         #endregion
@@ -53,12 +53,12 @@ namespace DlhSoft.UndoManagementLibrary
 
         #region Undo/redo
 
-        public void Undo(TimeSpan? relatedActionSpan = null)
+        public void Undo(int? relatedActionSpan = null)
         {
             if (!CanUndo)
                 return;
             if (relatedActionSpan == null)
-                relatedActionSpan = TimeSpan.Zero;
+                relatedActionSpan = 0;
             var originallyCanRedo = CanRedo;
             while (true)
             {
@@ -76,12 +76,12 @@ namespace DlhSoft.UndoManagementLibrary
                 OnPropertyChanged(nameof(CanRedo));
         }
 
-        public void Redo(TimeSpan? relatedActionSpan = null)
+        public void Redo(int? relatedActionSpan = null)
         {
             if (!CanRedo)
                 return;
             if (relatedActionSpan == null)
-                relatedActionSpan = TimeSpan.Zero;
+                relatedActionSpan = 0;
             var originallyCanUndo = CanUndo;
             while (true)
             {
