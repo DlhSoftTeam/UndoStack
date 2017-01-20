@@ -55,11 +55,11 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
-    <TypeScriptCompile Include="Bridge\output\dlhSoft.undoManagementLibrary.d.ts" />
+    <TypeScriptCompile Include="Bridge\output\DlhSoft.undoManagementLibrary.d.ts" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Bridge\output\dlhSoft.undoManagementLibrary.js" />
-    <Content Include="Bridge\output\dlhSoft.undoManagementLibrary.min.js" />
+    <Content Include="Bridge\output\DlhSoft.undoManagementLibrary.js" />
+    <Content Include="Bridge\output\DlhSoft.undoManagementLibrary.min.js" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\Bridge.Min.15.7.0\build\Bridge.Min.targets" Condition="Exists('..\packages\Bridge.Min.15.7.0\build\Bridge.Min.targets')" />

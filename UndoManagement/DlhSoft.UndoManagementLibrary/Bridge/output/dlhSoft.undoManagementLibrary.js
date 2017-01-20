@@ -1,6 +1,6 @@
 /**
  * @version 1.0.0.0
- * @copyright Copyright ©  2017
+ * @copyright Copyright © DlhSoft 2017
  * @compiler Bridge.NET 15.7.0
  */
 Bridge.assembly("DlhSoft.UndoManagementLibrary", function ($asm, globals) {
